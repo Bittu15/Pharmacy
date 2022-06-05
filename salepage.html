@@ -1,0 +1,478 @@
+<?php
+
+
+$server = "localhost";
+$username = "root";
+$password = "";
+$database = "signup";
+
+$con = mysqli_connect("$server", "$username", "$password", "$database");
+
+if(!$con){
+die("databse connection failed due to " .mysqli_connect_error());
+}
+$firstnameError = $lastnameError = $username = $emailError = $address1Error = $address2Error = $ZipError = $cardnameError = $cardnoError = $expiryError = $cvvError = "";
+$firstname = $lastname = $username = $email = $address1 = $address2= $zip = $cardname = $cardno = $expiry = $cvv = "";
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (empty($_POST["firstname"])) {
+    $firstnameError = "Name is mandatory";
+  } else {
+    $firstname = test_input($_POST["firstname"]);
+    // check if name only contains letters and whitespace
+    if (!preg_match("/^[a-zA-Z-' ]*$/",$firstname)) {
+      $firstnameError = "Only letters allowed";
+    }
+  }
+ 
+    if (empty($_POST["lastname"])) {
+      $lastnameError = "Name is mandatory";
+    } else {
+      $lastname = test_input($_POST["lastname"]);
+      // check if name only contains letters and whitespace
+      if (!preg_match("/^[a-zA-Z-' ]*$/",$lastname)) {
+        $lastnameError = "Only letters allowed";
+      }
+    }
+   
+      if (empty($_POST["username"])) {
+        $usernameError = "Name is mandatory";
+      } else {
+        $username = $_POST["username"];
+        // check if name only contains letters and whitespace
+        
+        }
+      
+    
+  if (empty($_POST["email"])) {
+    $email = " ";
+  } else {
+    $email = test_input($_POST["email"]);
+    // check if e-mail address is well-formed
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $emailError = "Invalid email format";
+    }
+  }
+   
+  if (empty($_POST["address1"])) {
+    $address1Error = "address is mandatory ";
+  } else {
+    $address1 = test_input($_POST["address1"]);
+  }
+  if (empty($_POST["address2"])) {
+    $address2 = " ";
+  } else {
+    $address2 = test_input($_POST["address2"]);
+    }
+  
+  if (empty($_POST["zip"])) {
+    $zipError = "address is mandatory ";
+  } else {
+    $zip = test_input($_POST["zip"]);
+    }
+  
+  
+    if (empty($_POST["cardname"])) {
+      $cardnameError =  " please fill the name written on card ";
+    } else {
+      $cardname = test_input($_POST["cardname"]);
+      // check if name only contains letters and whitespace
+      if (!preg_match("/^[a-zA-Z-' ]*$/",$cardname)) {
+        $cardnameError = "Only letters allowed";
+      }
+    
+    }
+    if (empty($_POST["cardno"])) {
+      $cardError = "card number is mandatory ";
+    } else {
+      $cardno= test_input($_POST["cardno"]);
+      }
+    
+    if (empty($_POST["expiry"])) {
+      $expiryError = "this is mandatory ";
+    } else {
+      $expiry= test_input($_POST["cardno"]);
+      }
+    
+    if (empty($_POST["cvv"])) {
+      $cvvError = "cvv is mandatory ";
+    } else {
+      $cvv= test_input($_POST["cvv"]);
+      }
+  
+    
+    $sql ="INSERT INTO `billdesk` ( `firstname`, `lastname`, `username`, `email`, `address1`, `address2`, `zip`, `cardname`, `cardnumber`, `expiry`, `cvv`, `datetime`) VALUES ( '$firstname', '$lastname', '$username', '$email', '$address1', '$address2', '$zip', '$cardname', '$cardno', '$expiry', '$cvv', current_timestamp());";
+
+  if($con ->query($sql) == true){
+   echo " Your message has been sent successfully";
+  
+ }
+ else{
+    echo "error: $sql <br> $con ->error" ;
+ }
+ $con->close();
+}
+
+function test_input($data) {
+  $data = trim($data);   
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+?>
+
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+  <meta name="generator" content="Hugo 0.88.1">
+  <title>Checkout example · Bootstrap v5.1</title>
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/checkout/">
+
+  <script src="https://kit.fontawesome.com/c74df327fb.js" crossorigin="anonymous"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link href="/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" href="/docs/5.1/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+  <link rel="icon" href="/docs/5.1/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="/docs/5.1/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+  <link rel="manifest" href="/docs/5.1/assets/img/favicons/manifest.json">
+  <link rel="mask-icon" href="/docs/5.1/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
+  <link rel="icon" href="/docs/5.1/assets/img/favicons/favicon.ico">
+  <meta name="theme-color" content="#7952b3">
+
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+
+
+  <!-- Custom styles for this template -->
+  <link href="form-validation.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Anu Chemist</a>
+      <!-- <img src="images.jpg" alt="" style=" "> -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon">
+
+        </span>
+      </button>
+      <div class="collapse navbar-collapse" style="text-align: right;" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="aboutus.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.php">Contact us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="salepage.php">Sale</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="itemlist.html">Item list</a>
+          </li>
+
+
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+  <div class="container d-flex justify-content-center">
+    <main>
+      <div class="py-5 text-center">
+        <h2>Bill Desk
+        </h2>
+      </div>
+
+      <div class="row g-5" style="width: 100%;">
+        <div class="col-md-5 col-lg-4 order-md-last">
+
+          <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Billing address</h4>
+            <form method="POST" class="needs-validation" novalidate=""  action ="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <label for="firstName" class="form-label">First name</label>
+                  <input type="text" class="form-control" id="firstName" placeholder="" value="" required="required">
+                  <div class="invalid-feedback">
+                    Valid first name is required.
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="lastName" class="form-label">Last name</label>
+                  <input type="text" class="form-control" id="lastName" placeholder="" value="" required="required">
+                  <div class="invalid-feedback">
+                    Valid last name is required.
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label for="username" class="form-label">Username</label>
+                  <div class="input-group has-validation">
+                    <span class="input-group-text">@</span>
+                    <input type="text" class="form-control" id="username" placeholder="Username" required="required">
+                    <div class="invalid-feedback">
+                      Your username is required.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label for="email" class="form-label">Email <span class="text-muted">(Optional)</span></label>
+                  <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                  <div class="invalid-feedback">
+                    Please enter a valid email address for shipping updates.
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label for="address" class="form-label">Address</label>
+                  <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
+                  <div class="invalid-feedback">
+                    Please enter your shipping address.
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label for="address2" class="form-label">Address 2 <span class="text-muted">(Optional)</span></label>
+                  <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+                </div>
+
+
+                <div class="col-md-4">
+                  <label for="state" class="form-label">State</label>
+                  <select class="form-select" id="state" required="">
+                    <option value="">Choose...</option>
+                    <option>Madhya Padesh</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Please provide a valid state.
+                  </div>
+                </div>
+
+                <div class="col-md-5">
+                  <label for="country" class="form-label">City</label>
+                  <select class="form-select" id="country" required>
+                    <option value="">Choose...</option>
+                    <option>Indore</option>
+                    <option>Ratlam</option>
+                    <option>Ahemdabad</option>
+                    <option>Neemuch</option>
+                    <option>Ujjain</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Please select a valid country.
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <label for="zip" class="form-label">Zip</label>
+                  <input type="number" class="form-control" id="zip" placeholder="" required>
+                  <div class="invalid-feedback">
+                    Zip code required.
+                  </div>
+                </div>
+              </div>
+
+              <hr class="my-4">
+
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="same-address">
+                <label class="form-check-label" for="same-address">Shipping address is the same as my billing
+                  address</label>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="save-info">
+                <label class="form-check-label" for="save-info">Save this information for next time</label>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+
+        <div class="col-md-5 col-lg-4 order-md-last">
+
+          <div class="col-md-7 col-lg-8">
+            <form class="needs-validation" novalidate="">
+
+              <hr class="my-4">
+
+              <h4 class="mb-3">Payment</h4>
+
+              <div class="my-3">
+                <div class="form-check">
+                  <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required>
+                  <label class="form-check-label" for="credit">Credit card</label>
+                </div>
+                <div class="form-check">
+                  <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
+                  <label class="form-check-label" for="debit">Debit card</label>
+                </div>
+                <div class="form-check">
+                  <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
+                  <label class="form-check-label" for="paypal">PayPal</label>
+                </div>
+              </div>
+
+              <div class="row gy-3">
+                <div class="col-md-6">
+                  <label for="cc-name" class="form-label">Name on card</label>
+                  <input type="text" class="form-control" id="cc-name" placeholder="" required>
+                  <small class="text-muted">Full name as displayed on card</small>
+                  <div class="invalid-feedback">
+                    Name on card is required
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="cc-number" class="form-label">Credit card number</label>
+                  <input type="number"  class="form-control" id="cc-number" placeholder="" required=>
+                  <div class="invalid-feedback">
+                    Credit card number is required
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <label for="cc-expiration" class="form-label">Expiry</label>
+                  <input type="number" class="form-control" id="cc-expiration" placeholder="" required>
+                  <div class="invalid-feedback">
+                    Expiration date required
+                  </div>
+                </div>
+
+                <div class="col-md-3 ">
+                  <label  for="cc-cvv" class="form-label">CVV</label>
+                  <input type="number" class="form-control" id="cc-cvv" placeholder="" required>
+                  <div class="invalid-feedback">
+                    Security code required
+                  </div>
+                </div>
+              </div>
+
+              <hr class="my-4">
+              <div  style= "color: green">
+              <input type ="submit" value ="Continue to checkout">
+              </div>
+               <!-- <button class="w-100 btn btn-primary btn-lg" type="submit" >
+                 <a style= "color :black;" href = "transaction.html" target = "blank"> 
+                Continue to checkout
+                 </a> 
+              </button> -->
+  
+            </form>
+          </div>
+        </div>
+      </div>
+  </div>
+  </main>
+
+
+  </div>
+
+  <!-- FOOTER -->
+
+  <footer class=" pt-3 " style="background-color: black; width: 100%;">
+
+    <div class="d-flex justify-content-around">
+
+      <div class="iioo">
+  
+        <a href="https://www.facebook.com/Sourabh.don007" target="blank">
+          <i class="fab fa-facebook text-white fa-3x" aria-hidden="true"></i>
+        </a>
+      
+    
+    </div>
+    
+    <div class="iioo">
+      
+        <a href="https://instagram.com/sourabh_lodha?utm_medium=copy_link" target="blank">
+          <i class="fab fa-instagram text-white fa-3x" aria-hidden="true"></i>
+        </a>
+      
+    
+    </div>
+    
+    <div class="iioo">
+      <a href="https://mobile.twitter.com/sourabhlodha85" target="_blank">
+        <i class="fab fa-twitter text-white fa-3x tcenter" aria-hidden="true"></i>
+      </a>
+    </div>
+    
+      <!-- <i class="fab text-white fa-3x fa-whatsapp-square"></i> -->
+      <div><a href="pay.html">
+        <i class="fab text-white fa-3x fa-google-pay"></i>
+      
+      </a>
+      </div>
+      
+         <div>
+           <a href="pay.html">
+            <i class="fab text-white fa-3x fa-cc-amazon-pay"></i>
+           </a>
+         </div>
+              
+    </div>
+    <br>
+    <div class="iconsstext text-center">
+      <p class="twhite ">
+      Anu Chemist © 2002, All Rights Reserved
+      </p>
+
+    </div>
+
+  </footer>
+
+
+  <script src="/docs/5.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+    crossorigin="anonymous"></script>
+
+  <script src="form-validation.js"></script>
+
+
+</body>
+
+</html>
